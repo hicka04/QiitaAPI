@@ -22,14 +22,18 @@ class SearchItemsTests: XCTestCase {
         XCTContext.runActivity(named: "when response OK") { _ in
             XCTContext.runActivity(named: "items.count > 0") { _ in
                 let expectation = self.expectation(description: "fetch")
-                QiitaAPIClient().send(SearchItems()) { result in
-                    switch result {
-                    case .success(let items):
+                _ = QiitaAPIClient().send(SearchItems())
+                    .receive(on: DispatchQueue.main)
+                    .sink(receiveCompletion: { completion in
+                        switch completion {
+                        case .failure(let error):
+                            print(error)
+                            XCTFail()
+                        case .finished:
+                            expectation.fulfill()
+                        }
+                    }) { items in
                         XCTAssertGreaterThan(items.count, 0)
-                        expectation.fulfill()
-                    case .failure:
-                        XCTFail()
-                    }
                 }
                 self.wait(for: [expectation], timeout: 2)
             }

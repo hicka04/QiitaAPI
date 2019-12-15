@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Combine
 
 public final class QiitaAPIClient {
     
@@ -41,5 +42,22 @@ public final class QiitaAPIClient {
         }
         
         task.resume()
+    }
+    
+    public func send<Request: QiitaRequest>(_ request: Request) -> AnyPublisher<Request.Response, QiitaClientError> {
+        let urlRequest = request.buildURLRequest()
+        print(urlRequest.url ?? "")
+        
+        return session.dataTaskPublisher(for: urlRequest)
+            .mapError { QiitaClientError.connectionError($0) }
+            .tryMap { try request.response(from: $0.data, urlResponse: $0.response) }
+            .mapError {
+                if let errorResponse = $0 as? ErrorResponse {
+                    return QiitaClientError.apiError(errorResponse)
+                } else {
+                    return QiitaClientError.responseParseError($0)
+                }
+            }
+            .eraseToAnyPublisher()
     }
 }
