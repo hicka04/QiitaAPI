@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct User: Decodable {
+public struct User: Decodable, Identifiable {
     
     let id: ID
     let profileImageUrl: URL
@@ -15,7 +15,7 @@ public struct User: Decodable {
 
 extension User {
     
-    public struct ID: RawRepresentable, Decodable {
+    public struct ID: RawRepresentable, Decodable, Hashable {
         
         public let rawValue: String
         
