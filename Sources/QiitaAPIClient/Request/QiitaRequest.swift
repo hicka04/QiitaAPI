@@ -54,15 +54,6 @@ public extension QiitaRequest {
     }
 }
 
-private extension Parameter {
-    
-    func convertToQueryItem() -> URLQueryItem? {
-        guard let value = value else { return nil }
-        return .init(name: name,
-                     value: value.addingPercentEncoding(withAllowedCharacters: .alphanumerics))
-    }
-}
-
 //private extension Array where Element == Parameter {
 //    
 //    func convertToHttpBody() -> Data? {

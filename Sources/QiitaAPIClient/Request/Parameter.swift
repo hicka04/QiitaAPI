@@ -20,4 +20,10 @@ public struct Parameter {
             self.value = nil
         }
     }
+
+    func convertToQueryItem() -> URLQueryItem? {
+        guard let value = value else { return nil }
+        return .init(name: name,
+                     value: value.addingPercentEncoding(withAllowedCharacters: .alphanumerics))
+    }
 }
