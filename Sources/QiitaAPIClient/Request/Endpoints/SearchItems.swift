@@ -23,9 +23,9 @@ public struct SearchItems: QiitaRequest, Paginatable {
         ]
     }
     
-    var query: String?
-    var page: Int?
-    var perPage: Int?
+    let query: String?
+    let page: Int?
+    let perPage: Int?
     
     public init(query: String? = nil,
                 page: Int? = nil,
