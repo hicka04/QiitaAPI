@@ -29,7 +29,7 @@ public extension QiitaRequest {
         var urlRequest = URLRequest(url: url)
         switch method {
         case .get:
-        components?.percentEncodedQueryItems = parameters.map { $0.convertToQueryItem() }
+        components?.percentEncodedQueryItems = parameters.compactMap { $0.convertToQueryItem() }
         //      case .post:
         //        urlRequest.httpBody = parameters.convertToHttpBody()
         }
@@ -51,14 +51,6 @@ public extension QiitaRequest {
         }
 
         return try decoder.decode(Response.self, from: data)
-    }
-}
-
-private extension Parameter {
-    
-    func convertToQueryItem() -> URLQueryItem {
-        .init(name: name,
-              value: value.addingPercentEncoding(withAllowedCharacters: .alphanumerics))
     }
 }
 

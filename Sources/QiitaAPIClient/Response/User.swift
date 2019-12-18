@@ -9,8 +9,8 @@ import Foundation
 
 public struct User: Decodable, Identifiable {
     
-    let id: ID
-    let profileImageUrl: URL
+    public let id: ID
+    public let profileImageUrl: URL
 }
 
 extension User {
