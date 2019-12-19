@@ -21,28 +21,30 @@ public final class QiitaAPIClient {
         let urlRequest = request.buildURLRequest()
         print(urlRequest.url ?? "")
         
+        let qiitaResponsePublisher = session.dataTaskPublisher(for: urlRequest)
+            .mapError { QiitaClientError.connectionError($0) }
+            .tryMap { try request.response(from: $0.data, urlResponse: $0.response)}
+            .mapError { error -> QiitaClientError in
+                if let errorResponse = error as? ErrorResponse {
+                    return QiitaClientError.apiError(errorResponse)
+                } else {
+                    return QiitaClientError.responseParseError(error)
+                }
+            }
+        
         return Deferred {
             Future { promise in
-                self.session.dataTaskPublisher(for: urlRequest)
-                    .mapError { QiitaClientError.connectionError($0) }
-                    .tryMap { try request.response(from: $0.data, urlResponse: $0.response)}
-                    .mapError { error -> QiitaClientError in
-                        if let errorResponse = error as? ErrorResponse {
-                            return QiitaClientError.apiError(errorResponse)
-                        } else {
-                            return QiitaClientError.responseParseError(error)
-                        }
-                    }.sink(receiveCompletion: { completion in
-                        switch completion {
-                        case .failure(let error):
-                            promise(.failure(error))
-                        case .finished:
-                            break
-                        }
-                    }, receiveValue: { response in
-                        promise(.success(response))
-                    })
-                    .store(in: &self.cancellables)
+                qiitaResponsePublisher.sink(receiveCompletion: { completion in
+                    switch completion {
+                    case .failure(let error):
+                        promise(.failure(error))
+                    case .finished:
+                        break
+                    }
+                }, receiveValue: { response in
+                    promise(.success(response))
+                })
+                .store(in: &self.cancellables)
             }
         }
     }
