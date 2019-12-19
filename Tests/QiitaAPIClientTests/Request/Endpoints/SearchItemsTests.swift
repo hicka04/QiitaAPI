@@ -35,7 +35,7 @@ class SearchItemsTests: XCTestCase {
                     }) { items in
                         XCTAssertGreaterThan(items.count, 0)
                 }
-                self.wait(for: [expectation], timeout: 2)
+                self.wait(for: [expectation], timeout: 3)
             }
         }
     }
@@ -57,7 +57,7 @@ class SearchItemsTests: XCTestCase {
                     }) { items in
                         XCTAssertEqual(items.count, 0)
                 }
-                self.wait(for: [expectation], timeout: 2)
+                self.wait(for: [expectation], timeout: 3)
             }
         }
         
@@ -77,7 +77,7 @@ class SearchItemsTests: XCTestCase {
                     }) { items in
                         XCTAssertGreaterThan(items.count, 0)
                 }
-                self.wait(for: [expectation], timeout: 2)
+                self.wait(for: [expectation], timeout: 3)
             }
         }
     }
@@ -105,7 +105,7 @@ class SearchItemsTests: XCTestCase {
                     }) { items in
                         XCTFail()
                 }
-                self.wait(for: [expectation], timeout: 2)
+                self.wait(for: [expectation], timeout: 3)
             }
         }
         
@@ -124,7 +124,7 @@ class SearchItemsTests: XCTestCase {
                     }) { items in
                         XCTAssertGreaterThan(items.count, 0)
                 }
-                self.wait(for: [expectation], timeout: 2)
+                self.wait(for: [expectation], timeout: 3)
             }
         }
     }
@@ -152,7 +152,7 @@ class SearchItemsTests: XCTestCase {
                     }) { items in
                         XCTFail()
                 }
-                self.wait(for: [expectation], timeout: 2)
+                self.wait(for: [expectation], timeout: 3)
             }
         }
         
@@ -171,7 +171,7 @@ class SearchItemsTests: XCTestCase {
                     }) { items in
                         XCTAssertGreaterThan(items.count, 0)
                 }
-                self.wait(for: [expectation], timeout: 2)
+                self.wait(for: [expectation], timeout: 3)
             }
         }
     }
