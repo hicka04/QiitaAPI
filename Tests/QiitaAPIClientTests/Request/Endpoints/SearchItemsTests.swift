@@ -7,8 +7,11 @@
 
 import XCTest
 import QiitaAPIClient
+import Combine
 
 class SearchItemsTests: XCTestCase {
+    
+    var cancellables: Set<AnyCancellable> = []
     
     override func setUp() {
         
@@ -22,7 +25,7 @@ class SearchItemsTests: XCTestCase {
         XCTContext.runActivity(named: "when response OK") { _ in
             XCTContext.runActivity(named: "items.count > 0") { _ in
                 let expectation = self.expectation(description: "fetch")
-                _ = QiitaAPIClient().send(SearchItems())
+                QiitaAPIClient().send(SearchItems())
                     .receive(on: DispatchQueue.main)
                     .sink(receiveCompletion: { completion in
                         switch completion {
@@ -34,7 +37,7 @@ class SearchItemsTests: XCTestCase {
                         }
                     }) { items in
                         XCTAssertGreaterThan(items.count, 0)
-                }
+                }.store(in: &cancellables)
                 self.wait(for: [expectation], timeout: 3)
             }
         }
@@ -44,7 +47,7 @@ class SearchItemsTests: XCTestCase {
         XCTContext.runActivity(named: "when query parameter is empty") { _ in
             XCTContext.runActivity(named: "items.count == 0") { _ in
                 let expectation = self.expectation(description: "query is empty")
-                _ = QiitaAPIClient().send(SearchItems(query: ""))
+                QiitaAPIClient().send(SearchItems(query: ""))
                     .receive(on: DispatchQueue.main)
                     .sink(receiveCompletion: { completion in
                         switch completion {
@@ -56,7 +59,7 @@ class SearchItemsTests: XCTestCase {
                         }
                     }) { items in
                         XCTAssertEqual(items.count, 0)
-                }
+                }.store(in: &cancellables)
                 self.wait(for: [expectation], timeout: 3)
             }
         }
@@ -64,7 +67,7 @@ class SearchItemsTests: XCTestCase {
         XCTContext.runActivity(named: "when query parameter is not empty") { _ in
             XCTContext.runActivity(named: "items.count > 0") { _ in
                 let expectation = self.expectation(description: "query is not empty")
-                _ = QiitaAPIClient().send(SearchItems(query: "Swift"))
+                QiitaAPIClient().send(SearchItems(query: "Swift"))
                     .receive(on: DispatchQueue.main)
                     .sink(receiveCompletion: { completion in
                         switch completion {
@@ -76,7 +79,7 @@ class SearchItemsTests: XCTestCase {
                         }
                     }) { items in
                         XCTAssertGreaterThan(items.count, 0)
-                }
+                }.store(in: &cancellables)
                 self.wait(for: [expectation], timeout: 3)
             }
         }
@@ -86,7 +89,7 @@ class SearchItemsTests: XCTestCase {
         XCTContext.runActivity(named: "when page parameter is 0") { _ in
             XCTContext.runActivity(named: "error response") { _ in
                 let expectation = self.expectation(description: "page is 0")
-                _ = QiitaAPIClient().send(SearchItems(page: 0))
+                QiitaAPIClient().send(SearchItems(page: 0))
                     .receive(on: DispatchQueue.main)
                     .sink(receiveCompletion: { completion in
                         switch completion {
@@ -104,7 +107,7 @@ class SearchItemsTests: XCTestCase {
                         }
                     }) { items in
                         XCTFail()
-                }
+                }.store(in: &cancellables)
                 self.wait(for: [expectation], timeout: 3)
             }
         }
@@ -112,7 +115,7 @@ class SearchItemsTests: XCTestCase {
         XCTContext.runActivity(named: "when page parameter > 0") { _ in
             XCTContext.runActivity(named: "items.count > 0") { _ in
                 let expectation = self.expectation(description: "page > 0")
-                _ = QiitaAPIClient().send(SearchItems(page: 1))
+                QiitaAPIClient().send(SearchItems(page: 1))
                     .receive(on: DispatchQueue.main)
                     .sink(receiveCompletion: { completion in
                         switch completion {
@@ -123,7 +126,7 @@ class SearchItemsTests: XCTestCase {
                         }
                     }) { items in
                         XCTAssertGreaterThan(items.count, 0)
-                }
+                }.store(in: &cancellables)
                 self.wait(for: [expectation], timeout: 3)
             }
         }
@@ -133,7 +136,7 @@ class SearchItemsTests: XCTestCase {
         XCTContext.runActivity(named: "when perPage parameter is 0") { _ in
             XCTContext.runActivity(named: "error response") { _ in
                 let expectation = self.expectation(description: "perPage is 0")
-                _ = QiitaAPIClient().send(SearchItems(perPage: 0))
+                QiitaAPIClient().send(SearchItems(perPage: 0))
                     .receive(on: DispatchQueue.main)
                     .sink(receiveCompletion: { completion in
                         switch completion {
@@ -151,7 +154,7 @@ class SearchItemsTests: XCTestCase {
                         }
                     }) { items in
                         XCTFail()
-                }
+                }.store(in: &cancellables)
                 self.wait(for: [expectation], timeout: 3)
             }
         }
@@ -159,7 +162,7 @@ class SearchItemsTests: XCTestCase {
         XCTContext.runActivity(named: "when perPage parameter > 0") { _ in
             XCTContext.runActivity(named: "items.count > 0") { _ in
                 let expectation = self.expectation(description: "perPage > 0")
-                _ = QiitaAPIClient().send(SearchItems(perPage: 1))
+                QiitaAPIClient().send(SearchItems(perPage: 1))
                     .receive(on: DispatchQueue.main)
                     .sink(receiveCompletion: { completion in
                         switch completion {
@@ -170,7 +173,7 @@ class SearchItemsTests: XCTestCase {
                         }
                     }) { items in
                         XCTAssertGreaterThan(items.count, 0)
-                }
+                }.store(in: &cancellables)
                 self.wait(for: [expectation], timeout: 3)
             }
         }
