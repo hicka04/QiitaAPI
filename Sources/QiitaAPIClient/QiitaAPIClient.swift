@@ -8,7 +8,18 @@
 import Foundation
 import Combine
 
-public final class QiitaAPIClient {
+public protocol QiitaAPIRequestable: AnyObject {
+    
+    @available(iOS, deprecated: 13.0, renamed: "send")
+    @available(OSX, deprecated: 10.15, renamed: "send")
+    func send<Request: QiitaRequest>(_ request: Request,
+                                     completion: @escaping (Result<Request.Response, QiitaClientError>) -> Void)
+    
+    @available(OSX 10.15, iOS 13.0, *)
+    func send<Request: QiitaRequest>(_ request: Request) -> Deferred<Future<Request.Response, QiitaClientError>>
+}
+
+public final class QiitaAPIClient: QiitaAPIRequestable {
     
     private let session: URLSession
     private var cancellables: Set<AnyCancellable> = []
