@@ -4,12 +4,12 @@ Type-Safe QiitaAPI Client
 
 ## Requirements
 * iOS >= v11
-* macOS >= v10_15
+* macOS >= v10.15
 
 ## install
 ### Swift Package Manager
 Package.swift
-```
+```Swift
 // ...
     dependencies: [
         .package(url: "https://github.com/hicka04/QiitaAPIClient.git", .upToNextMajor("version"))
@@ -21,13 +21,13 @@ Package.swift
 // ...
 ```
 
-```
+```sh
 $ swfit package build
 ```
 
 ## Usage
 ### `Combine` (Recommend)
-```
+```Swift
 import QiitaAPIClient
 
 var cancellables: Set<AnyCancellable> = []
@@ -46,7 +46,7 @@ QiitaAPIClient().send(QiitaAPI.SearchItems())
 ```
 
 ### Closure
-```
+```Swift
 import QiitaAPIClient
 
 QiitaAPIClient().send(QiitaAPI.SearchItems()) { [weak self] result in
