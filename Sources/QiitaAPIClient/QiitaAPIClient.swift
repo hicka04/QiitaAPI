@@ -8,14 +8,28 @@
 import Foundation
 import Combine
 
-public final class QiitaAPIClient {
+public protocol QiitaAPIRequestable: AnyObject {
+    
+    @available(iOS, deprecated: 13.0, renamed: "send")
+    @available(OSX, deprecated: 10.15, renamed: "send")
+    func send<Request: QiitaRequest>(_ request: Request,
+                                     completion: @escaping (Result<Request.Response, QiitaClientError>) -> Void)
+    
+    @available(OSX 10.15, iOS 13.0, *)
+    func send<Request: QiitaRequest>(_ request: Request) -> Deferred<Future<Request.Response, QiitaClientError>>
+}
+
+public final class QiitaAPIClient: QiitaAPIRequestable {
     
     private let session: URLSession
+    private var cancellables: Set<AnyCancellable> = []
     
     public init(session: URLSession = .init(configuration: .default)) {
         self.session = session
     }
     
+    @available(iOS, deprecated: 13.0, renamed: "send")
+    @available(OSX, deprecated: 10.15, renamed: "send")
     public func send<Request: QiitaRequest>(_ request: Request,
                                             completion: @escaping (Result<Request.Response, QiitaClientError>) -> Void) {
         let urlRequest = request.buildURLRequest()
@@ -44,20 +58,36 @@ public final class QiitaAPIClient {
         task.resume()
     }
     
-    public func send<Request: QiitaRequest>(_ request: Request) -> AnyPublisher<Request.Response, QiitaClientError> {
+    @available(OSX 10.15, iOS 13.0, *)
+    public func send<Request: QiitaRequest>(_ request: Request) -> Deferred<Future<Request.Response, QiitaClientError>> {
         let urlRequest = request.buildURLRequest()
         print(urlRequest.url ?? "")
         
-        return session.dataTaskPublisher(for: urlRequest)
+        let qiitaResponsePublisher = session.dataTaskPublisher(for: urlRequest)
             .mapError { QiitaClientError.connectionError($0) }
-            .tryMap { try request.response(from: $0.data, urlResponse: $0.response) }
-            .mapError {
-                if let errorResponse = $0 as? ErrorResponse {
+            .tryMap { try request.response(from: $0.data, urlResponse: $0.response)}
+            .mapError { error -> QiitaClientError in
+                if let errorResponse = error as? ErrorResponse {
                     return QiitaClientError.apiError(errorResponse)
                 } else {
-                    return QiitaClientError.responseParseError($0)
+                    return QiitaClientError.responseParseError(error)
                 }
             }
-            .eraseToAnyPublisher()
+        
+        return Deferred {
+            Future { promise in
+                qiitaResponsePublisher.sink(receiveCompletion: { completion in
+                    switch completion {
+                    case .failure(let error):
+                        promise(.failure(error))
+                    case .finished:
+                        break
+                    }
+                }, receiveValue: { response in
+                    promise(.success(response))
+                })
+                .store(in: &self.cancellables)
+            }
+        }
     }
 }

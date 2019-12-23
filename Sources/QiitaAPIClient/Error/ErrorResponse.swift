@@ -7,8 +7,13 @@
 
 import Foundation
 
-public struct ErrorResponse: Decodable, Error {
+public struct ErrorResponse: Error, Decodable, Equatable {
     
-    let message: String
-    let type: String
+    public let message: String
+    public let type: String
+    
+    init(message: String, type: String) {
+        self.message = message
+        self.type = type
+    }
 }
