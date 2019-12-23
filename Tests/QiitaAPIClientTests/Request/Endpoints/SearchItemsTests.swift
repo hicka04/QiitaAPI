@@ -25,7 +25,7 @@ class SearchItemsTests: XCTestCase {
         XCTContext.runActivity(named: "when response OK") { _ in
             XCTContext.runActivity(named: "items.count > 0") { _ in
                 let expectation = self.expectation(description: "fetch")
-                QiitaAPIClient().send(SearchItems())
+                QiitaAPIClient().send(QiitaAPI.SearchItems())
                     .receive(on: DispatchQueue.main)
                     .sink(receiveCompletion: { completion in
                         switch completion {
@@ -47,7 +47,7 @@ class SearchItemsTests: XCTestCase {
         XCTContext.runActivity(named: "when query parameter is empty") { _ in
             XCTContext.runActivity(named: "items.count == 0") { _ in
                 let expectation = self.expectation(description: "query is empty")
-                QiitaAPIClient().send(SearchItems(query: ""))
+                QiitaAPIClient().send(QiitaAPI.SearchItems(query: ""))
                     .receive(on: DispatchQueue.main)
                     .sink(receiveCompletion: { completion in
                         switch completion {
@@ -67,7 +67,7 @@ class SearchItemsTests: XCTestCase {
         XCTContext.runActivity(named: "when query parameter is not empty") { _ in
             XCTContext.runActivity(named: "items.count > 0") { _ in
                 let expectation = self.expectation(description: "query is not empty")
-                QiitaAPIClient().send(SearchItems(query: "Swift"))
+                QiitaAPIClient().send(QiitaAPI.SearchItems(query: "Swift"))
                     .receive(on: DispatchQueue.main)
                     .sink(receiveCompletion: { completion in
                         switch completion {
@@ -89,7 +89,7 @@ class SearchItemsTests: XCTestCase {
         XCTContext.runActivity(named: "when page parameter is 0") { _ in
             XCTContext.runActivity(named: "error response") { _ in
                 let expectation = self.expectation(description: "page is 0")
-                QiitaAPIClient().send(SearchItems(page: 0))
+                QiitaAPIClient().send(QiitaAPI.SearchItems(page: 0))
                     .receive(on: DispatchQueue.main)
                     .sink(receiveCompletion: { completion in
                         switch completion {
@@ -115,7 +115,7 @@ class SearchItemsTests: XCTestCase {
         XCTContext.runActivity(named: "when page parameter > 0") { _ in
             XCTContext.runActivity(named: "items.count > 0") { _ in
                 let expectation = self.expectation(description: "page > 0")
-                QiitaAPIClient().send(SearchItems(page: 1))
+                QiitaAPIClient().send(QiitaAPI.SearchItems(page: 1))
                     .receive(on: DispatchQueue.main)
                     .sink(receiveCompletion: { completion in
                         switch completion {
@@ -136,7 +136,7 @@ class SearchItemsTests: XCTestCase {
         XCTContext.runActivity(named: "when perPage parameter is 0") { _ in
             XCTContext.runActivity(named: "error response") { _ in
                 let expectation = self.expectation(description: "perPage is 0")
-                QiitaAPIClient().send(SearchItems(perPage: 0))
+                QiitaAPIClient().send(QiitaAPI.SearchItems(perPage: 0))
                     .receive(on: DispatchQueue.main)
                     .sink(receiveCompletion: { completion in
                         switch completion {
@@ -162,7 +162,7 @@ class SearchItemsTests: XCTestCase {
         XCTContext.runActivity(named: "when perPage parameter > 0") { _ in
             XCTContext.runActivity(named: "items.count > 0") { _ in
                 let expectation = self.expectation(description: "perPage > 0")
-                QiitaAPIClient().send(SearchItems(perPage: 1))
+                QiitaAPIClient().send(QiitaAPI.SearchItems(perPage: 1))
                     .receive(on: DispatchQueue.main)
                     .sink(receiveCompletion: { completion in
                         switch completion {
