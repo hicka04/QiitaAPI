@@ -3,7 +3,7 @@
 Type-Safe QiitaAPI Client
 
 ## Requirements
-* iOS >= v11
+* iOS >= v13
 * macOS >= v10.15
 
 ## install
