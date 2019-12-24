@@ -1,5 +1,5 @@
 //
-//  SearchItems.swift
+//  SearchArticles.swift
 //  
 //
 //  Created by hicka04 on 2019/12/12.
@@ -9,9 +9,9 @@ import Foundation
 
 public extension QiitaAPI {
 
-    struct SearchItems: QiitaRequest, Paginatable {
+    struct SearchArticles: QiitaRequest, Paginatable {
         
-        public typealias Response = [Item]
+        public typealias Response = [Article]
         
         public let method: HTTPMethod = .get
         

@@ -32,7 +32,7 @@ import QiitaAPIClient
 
 var cancellables: Set<AnyCancellable> = []
 
-QiitaAPIClient().send(QiitaAPI.SearchItems())
+QiitaAPIClient().send(QiitaAPI.SearchArticles())
     .sink(receiveCompletion: { completion in
         switch completion {
         case .failure(let error):
@@ -40,8 +40,8 @@ QiitaAPIClient().send(QiitaAPI.SearchItems())
         case .finished:
             print("finished")
         }
-    }) { items in
-        print(items)
+    }) { articles in
+        print(articles)
     }.store(in: &cancellables)
 ```
 
@@ -49,10 +49,10 @@ QiitaAPIClient().send(QiitaAPI.SearchItems())
 ```Swift
 import QiitaAPIClient
 
-QiitaAPIClient().send(QiitaAPI.SearchItems()) { [weak self] result in
+QiitaAPIClient().send(QiitaAPI.SearchArticles()) { [weak self] result in
     switch result {
-    case .success(let items):
-        print(items)
+    case .success(let articles):
+        print(articles)
     case .failure(let error):
         print(error)
     }

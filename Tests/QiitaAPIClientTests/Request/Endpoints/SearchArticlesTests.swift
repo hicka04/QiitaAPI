@@ -1,5 +1,5 @@
 //
-//  SearchItemsTests.swift
+//  SearchArticlesTests.swift
 //  
 //
 //  Created by hicka04 on 2019/12/13.
@@ -9,7 +9,7 @@ import XCTest
 import QiitaAPIClient
 import Combine
 
-class SearchItemsTests: XCTestCase {
+class SearchArticlesTests: XCTestCase {
     
     var cancellables: Set<AnyCancellable> = []
     
@@ -23,9 +23,9 @@ class SearchItemsTests: XCTestCase {
     
     func testRequest() {
         XCTContext.runActivity(named: "when response OK") { _ in
-            XCTContext.runActivity(named: "items.count > 0") { _ in
+            XCTContext.runActivity(named: "articles.count > 0") { _ in
                 let expectation = self.expectation(description: "fetch")
-                QiitaAPIClient().send(QiitaAPI.SearchItems())
+                QiitaAPIClient().send(QiitaAPI.SearchArticles())
                     .receive(on: DispatchQueue.main)
                     .sink(receiveCompletion: { completion in
                         switch completion {
@@ -35,8 +35,8 @@ class SearchItemsTests: XCTestCase {
                         case .finished:
                             expectation.fulfill()
                         }
-                    }) { items in
-                        XCTAssertGreaterThan(items.count, 0)
+                    }) { articles in
+                        XCTAssertGreaterThan(articles.count, 0)
                 }.store(in: &cancellables)
                 self.wait(for: [expectation], timeout: 3)
             }
@@ -45,9 +45,9 @@ class SearchItemsTests: XCTestCase {
     
     func testQueryRequest() {
         XCTContext.runActivity(named: "when query parameter is empty") { _ in
-            XCTContext.runActivity(named: "items.count == 0") { _ in
+            XCTContext.runActivity(named: "articles.count == 0") { _ in
                 let expectation = self.expectation(description: "query is empty")
-                QiitaAPIClient().send(QiitaAPI.SearchItems(query: ""))
+                QiitaAPIClient().send(QiitaAPI.SearchArticles(query: ""))
                     .receive(on: DispatchQueue.main)
                     .sink(receiveCompletion: { completion in
                         switch completion {
@@ -57,17 +57,17 @@ class SearchItemsTests: XCTestCase {
                         case .finished:
                             expectation.fulfill()
                         }
-                    }) { items in
-                        XCTAssertEqual(items.count, 0)
+                    }) { articles in
+                        XCTAssertEqual(articles.count, 0)
                 }.store(in: &cancellables)
                 self.wait(for: [expectation], timeout: 3)
             }
         }
         
         XCTContext.runActivity(named: "when query parameter is not empty") { _ in
-            XCTContext.runActivity(named: "items.count > 0") { _ in
+            XCTContext.runActivity(named: "articles.count > 0") { _ in
                 let expectation = self.expectation(description: "query is not empty")
-                QiitaAPIClient().send(QiitaAPI.SearchItems(query: "Swift"))
+                QiitaAPIClient().send(QiitaAPI.SearchArticles(query: "Swift"))
                     .receive(on: DispatchQueue.main)
                     .sink(receiveCompletion: { completion in
                         switch completion {
@@ -77,8 +77,8 @@ class SearchItemsTests: XCTestCase {
                         case .finished:
                             expectation.fulfill()
                         }
-                    }) { items in
-                        XCTAssertGreaterThan(items.count, 0)
+                    }) { articles in
+                        XCTAssertGreaterThan(articles.count, 0)
                 }.store(in: &cancellables)
                 self.wait(for: [expectation], timeout: 3)
             }
@@ -89,7 +89,7 @@ class SearchItemsTests: XCTestCase {
         XCTContext.runActivity(named: "when page parameter is 0") { _ in
             XCTContext.runActivity(named: "error response") { _ in
                 let expectation = self.expectation(description: "page is 0")
-                QiitaAPIClient().send(QiitaAPI.SearchItems(page: 0))
+                QiitaAPIClient().send(QiitaAPI.SearchArticles(page: 0))
                     .receive(on: DispatchQueue.main)
                     .sink(receiveCompletion: { completion in
                         switch completion {
@@ -105,7 +105,7 @@ class SearchItemsTests: XCTestCase {
                         case .finished:
                             XCTFail()
                         }
-                    }) { items in
+                    }) { articles in
                         XCTFail()
                 }.store(in: &cancellables)
                 self.wait(for: [expectation], timeout: 3)
@@ -113,9 +113,9 @@ class SearchItemsTests: XCTestCase {
         }
         
         XCTContext.runActivity(named: "when page parameter > 0") { _ in
-            XCTContext.runActivity(named: "items.count > 0") { _ in
+            XCTContext.runActivity(named: "articles.count > 0") { _ in
                 let expectation = self.expectation(description: "page > 0")
-                QiitaAPIClient().send(QiitaAPI.SearchItems(page: 1))
+                QiitaAPIClient().send(QiitaAPI.SearchArticles(page: 1))
                     .receive(on: DispatchQueue.main)
                     .sink(receiveCompletion: { completion in
                         switch completion {
@@ -124,8 +124,8 @@ class SearchItemsTests: XCTestCase {
                         case .finished:
                             expectation.fulfill()
                         }
-                    }) { items in
-                        XCTAssertGreaterThan(items.count, 0)
+                    }) { articles in
+                        XCTAssertGreaterThan(articles.count, 0)
                 }.store(in: &cancellables)
                 self.wait(for: [expectation], timeout: 3)
             }
@@ -136,7 +136,7 @@ class SearchItemsTests: XCTestCase {
         XCTContext.runActivity(named: "when perPage parameter is 0") { _ in
             XCTContext.runActivity(named: "error response") { _ in
                 let expectation = self.expectation(description: "perPage is 0")
-                QiitaAPIClient().send(QiitaAPI.SearchItems(perPage: 0))
+                QiitaAPIClient().send(QiitaAPI.SearchArticles(perPage: 0))
                     .receive(on: DispatchQueue.main)
                     .sink(receiveCompletion: { completion in
                         switch completion {
@@ -152,7 +152,7 @@ class SearchItemsTests: XCTestCase {
                         case .finished:
                             XCTFail()
                         }
-                    }) { items in
+                    }) { articles in
                         XCTFail()
                 }.store(in: &cancellables)
                 self.wait(for: [expectation], timeout: 3)
@@ -160,9 +160,9 @@ class SearchItemsTests: XCTestCase {
         }
         
         XCTContext.runActivity(named: "when perPage parameter > 0") { _ in
-            XCTContext.runActivity(named: "items.count > 0") { _ in
+            XCTContext.runActivity(named: "articles.count > 0") { _ in
                 let expectation = self.expectation(description: "perPage > 0")
-                QiitaAPIClient().send(QiitaAPI.SearchItems(perPage: 1))
+                QiitaAPIClient().send(QiitaAPI.SearchArticles(perPage: 1))
                     .receive(on: DispatchQueue.main)
                     .sink(receiveCompletion: { completion in
                         switch completion {
@@ -171,8 +171,8 @@ class SearchItemsTests: XCTestCase {
                         case .finished:
                             expectation.fulfill()
                         }
-                    }) { items in
-                        XCTAssertGreaterThan(items.count, 0)
+                    }) { articles in
+                        XCTAssertGreaterThan(articles.count, 0)
                 }.store(in: &cancellables)
                 self.wait(for: [expectation], timeout: 3)
             }

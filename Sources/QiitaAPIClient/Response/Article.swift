@@ -1,5 +1,5 @@
 //
-//  Item.swift
+//  Article.swift
 //  
 //
 //  Created by hicka04 on 2019/12/12.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct Item: Decodable, Identifiable, Equatable {
+public struct Article: Decodable, Identifiable, Equatable {
     
     public let id: ID
     public let title: String
@@ -19,7 +19,7 @@ public struct Item: Decodable, Identifiable, Equatable {
     public let user: User
 }
 
-extension Item {
+extension Article {
     
     public struct ID: RawRepresentable, Decodable, Hashable, Equatable {
         
