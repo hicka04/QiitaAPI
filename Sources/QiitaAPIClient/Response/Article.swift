@@ -12,6 +12,8 @@ public struct Article: Decodable, Identifiable, Equatable {
     public let id: ID
     public let title: String
     public let tags: [Tag]
+    public let body: String
+    public let renderedBody: String
     public let url: URL
     public let createdAt: Date
     public let updatedAt: Date
