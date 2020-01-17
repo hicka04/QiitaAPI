@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct Article: Decodable, Identifiable, Equatable {
+public struct Article: Codable, Identifiable, Equatable {
     
     public let id: ID
     public let title: String
@@ -23,7 +23,7 @@ public struct Article: Decodable, Identifiable, Equatable {
 
 extension Article {
     
-    public struct ID: RawRepresentable, Decodable, Hashable, Equatable {
+    public struct ID: RawRepresentable, Codable, Hashable, Equatable {
         
         public let rawValue: String
         
@@ -32,7 +32,7 @@ extension Article {
         }
     }
     
-    public struct Tag: Decodable, Equatable {
+    public struct Tag: Codable, Equatable {
         
         public let name: String
     }
